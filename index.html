@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Diện Tích & Chu Vi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+        h2 {
+            color: #333;
+            font-weight: bold;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            text-align: left;
+            margin-left: 10px;
+        }
+        select, input, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #ketQua {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tính diện tích & chu vi</h2>
+        <label for="hinh">Chọn hình:</label>
+        <select id="hinh" onchange="capNhatNhapLieu()">
+            <option value="chu_nhat">Hình chữ nhật</option>
+            <option value="tron">Hình tròn</option>
+            <option value="tam_giac">Hình tam giác</option>
+        </select>
+        <div id="nhapLieu"></div>
+        <button onclick="tinhToan()">Tính toán</button>
+        <h3 id="ketQua"></h3>
+    </div>
+
+    <script>
+        function capNhatNhapLieu() {
+            const hinh = document.getElementById("hinh").value;
+            const nhapLieuDiv = document.getElementById("nhapLieu");
+            nhapLieuDiv.innerHTML = "";
+
+            if (hinh === "chu_nhat") {
+                nhapLieuDiv.innerHTML = '<input id="chieuDai" type="number" placeholder="Nhập chiều dài">' +
+                                        '<input id="chieuRong" type="number" placeholder="Nhập chiều rộng">';
+            } else if (hinh === "tron") {
+                nhapLieuDiv.innerHTML = '<input id="banKinh" type="number" placeholder="Nhập bán kính">';
+            } else if (hinh === "tam_giac") {
+                nhapLieuDiv.innerHTML = '<input id="canhDay" type="number" placeholder="Nhập cạnh đáy">' +
+                                        '<input id="chieuCao" type="number" placeholder="Nhập chiều cao">';
+            }
+        }
+
+        function tinhToan() {
+            const hinh = document.getElementById("hinh").value;
+            let dienTich = 0, chuVi = 0;
+            let loi = "";
+
+            if (hinh === "chu_nhat") {
+                let chieuDai = parseFloat(document.getElementById("chieuDai").value);
+                let chieuRong = parseFloat(document.getElementById("chieuRong").value);
+                if (chieuDai > 0 && chieuRong > 0) {
+                    dienTich = chieuDai * chieuRong;
+                    chuVi = 2 * (chieuDai + chieuRong);
+                } else {
+                    loi = "Vui lòng nhập giá trị hợp lệ!";
+                }
+            } else if (hinh === "tron") {
+                let banKinh = parseFloat(document.getElementById("banKinh").value);
+                if (banKinh > 0) {
+                    dienTich = Math.PI * banKinh * banKinh;
+                    chuVi = 2 * Math.PI * banKinh;
+                } else {
+                    loi = "Vui lòng nhập bán kính hợp lệ!";
+                }
+            } else if (hinh === "tam_giac") {
+                let canhDay = parseFloat(document.getElementById("canhDay").value);
+                let chieuCao = parseFloat(document.getElementById("chieuCao").value);
+                if (canhDay > 0 && chieuCao > 0) {
+                    dienTich = 0.5 * canhDay * chieuCao;
+                    chuVi = "Không thể tính chu vi do thiếu thông tin các cạnh còn lại";
+                } else {
+                    loi = "Vui lòng nhập giá trị hợp lệ!";
+                }
+            }
+
+            if (loi) {
+                document.getElementById("ketQua").innerText = loi;
+            } else {
+                if (typeof chuVi === "string") {
+                    document.getElementById("ketQua").innerText = `Diện tích: ${dienTich.toFixed(2)}, ${chuVi}`;
+                } else {
+                    document.getElementById("ketQua").innerText = `Diện tích: ${dienTich.toFixed(2)}, Chu vi: ${chuVi.toFixed(2)}`;
+                }
+            }
+        }
+
+        capNhatNhapLieu();
+    </script>
+</body>
+</html>
